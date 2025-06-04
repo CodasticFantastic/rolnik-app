@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/shadcn/card";
+} from "@/frontend/components/shadcn/card";
 import { SignInForm } from "./components/SignInForm";
 import Link from "next/link";
 

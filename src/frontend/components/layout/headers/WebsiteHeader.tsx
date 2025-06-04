@@ -1,4 +1,4 @@
-import { Button } from "@/components/shadcn/button";
+import { Button } from "@/frontend/components/shadcn/button";
 import Image from "next/image";
 import Link from "next/link";
 

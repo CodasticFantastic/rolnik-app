@@ -1,3 +1,7 @@
+// TODO:
+//  - /lib/validators/user.ts
+//  - /lib/validators/product.ts
+
 import { z } from "zod";
 
 export const globalZodValidators = {
