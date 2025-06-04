@@ -1,6 +1,8 @@
 import { CreateUserInput } from "./user.types";
 import { prisma } from "@/backend/lib/prisma/prisma.client";
 import { toUserResponse } from "./user.mapper";
+import { AppError } from "@/backend/lib/errors/appError";
+import { ErrorCode } from "@/backend/lib/errors/errorCodes";
 
 export const userService = {
   async create(data: CreateUserInput) {
@@ -9,7 +11,7 @@ export const userService = {
     });
 
     if (existing) {
-      throw new Error("User with this email already exists.");
+      throw new AppError(ErrorCode.USER_ALREADY_EXISTS, 409);
     }
 
     const created = await prisma.user.create({ data });

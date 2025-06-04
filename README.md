@@ -1,1 +1,0 @@
-Use Rest Client extension for VS Code in order to quick test .html file 
