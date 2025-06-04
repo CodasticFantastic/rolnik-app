@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma/prisma.client";
-import {
-  createUserSchema,
-  userSchema,
-} from "@/backend/modules/user/user.schema";
+import { createUserSchema } from "@/backend/modules/user/user.schema";
 import { UserController } from "@/backend/modules/user/user.controller";
 
 export async function GET() {
   try {
     const users = await UserController.getUsers();
     return NextResponse.json(users);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch users" },
       { status: 500 }

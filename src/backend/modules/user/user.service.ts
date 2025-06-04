@@ -1,5 +1,5 @@
 import { CreateUserInput } from "./user.types";
-import { prisma } from "@/lib/prisma/prisma.client";
+import { prisma } from "@/backend/lib/prisma/prisma.client";
 import { toUserResponse } from "./user.mapper";
 
 export const userService = {

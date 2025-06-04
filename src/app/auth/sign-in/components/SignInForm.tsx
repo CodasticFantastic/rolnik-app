@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/frontend/components/shadcn/form";
 import { Input } from "@/frontend/components/shadcn/input";
-import { globalZodValidators } from "@/lib/validators/globalZodValidators";
+import { globalZodValidators } from "@/frontend/lib/validators/globalZodValidators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
