@@ -1,19 +1,16 @@
 import { ZodTypeAny, z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { AppError } from "../errors/app.error";
-import {
-  GlobalErrorCode,
-  globalError,
-} from "../errors/global.error.codes";
+import { GlobalErrorCode, globalError } from "../errors/global.error.codes";
 
-type PostHandler<T extends ZodTypeAny> = (
+type PostRouteHandler<T extends ZodTypeAny> = (
   data: z.infer<T>,
   req: NextRequest
 ) => Promise<Response>;
 
 export function handlePostRoute<T extends ZodTypeAny>(
-  schema: T,
-  handler: PostHandler<T>
+  schemaToValidate: T,
+  handler: PostRouteHandler<T>
 ): (req: NextRequest) => Promise<Response> {
   return async function (req: NextRequest): Promise<Response> {
     try {
@@ -25,7 +22,7 @@ export function handlePostRoute<T extends ZodTypeAny>(
         throw new AppError({ ...globalError.INVALID_JSON });
       }
 
-      const parsed = schema.safeParse(body);
+      const parsed = schemaToValidate.safeParse(body);
 
       if (!parsed.success) {
         throw new AppError({

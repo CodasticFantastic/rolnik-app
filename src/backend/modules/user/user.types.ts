@@ -1,12 +1,28 @@
-export type User = {
+import { UserRole } from "@prisma/client";
+
+export interface User {
   id: string;
   email: string;
   password: string;
-  name: string | null;
-  role: "ADMIN" | "LOW_PRIVILEGED_USER";
+  name: string;
+  role: UserRole;
   createdAt: Date;
-};
+}
 
-export type SanitizedUserResponse = Omit<User, "password">;
-export type CreateUserInput = Omit<User, "id" | "createdAt">;
-export type UpdateUserInput = Partial<CreateUserInput> & { id: string };
+export interface SanitizedUser {
+  id: string;
+  email: string;
+  name: string | null;
+  role: UserRole;
+}
+
+export interface CreateUserInput {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface SignInUserInput {
+  email: string;
+  password: string;
+}

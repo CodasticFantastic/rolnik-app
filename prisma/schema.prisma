@@ -23,6 +23,6 @@ model User {
   role      UserRole @default(LOW_PRIVILEGED_USER)
   email     String   @unique
   password  String
-  name      String?
+  name      String
   createdAt DateTime @default(now())
 }

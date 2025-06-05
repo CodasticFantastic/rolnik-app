@@ -1,15 +1,12 @@
-import { userMapper } from "./user.mapper";
 import { userService } from "./user.service";
-import { CreateUserInput, SanitizedUserResponse } from "./user.types";
+import { CreateUserInput, SanitizedUser } from "./user.types";
 
 export const UserController = {
-  async getUsers(): Promise<SanitizedUserResponse[]> {
-    const users = await userService.getAll();
-    return users.map(userMapper.sanitizedUserResponse);
+  async getUsers(): Promise<SanitizedUser[]> {
+    return await userService.getAllUsers();
   },
 
-  async createUser(data: CreateUserInput): Promise<SanitizedUserResponse> {
-    const user = await userService.create(data);
-    return userMapper.sanitizedUserResponse(user);
+  async createUser(data: CreateUserInput): Promise<SanitizedUser> {
+    return await userService.createLowPrivilegedUser(data);
   },
 };
