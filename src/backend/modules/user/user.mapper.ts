@@ -1,10 +1,14 @@
 import { User as PrismaUser } from "@prisma/client";
-import { User } from "./user.types";
+import { SanitizedUserResponse } from "./user.types";
 
-export const toUserResponse = (u: PrismaUser): User => ({
-  id: u.id,
-  email: u.email,
-  name: u.name ?? "",
-  role: u.role,
-  createdAt: u.createdAt,
-});
+export const userMapper = {
+  sanitizedUserResponse: (u: PrismaUser): SanitizedUserResponse => {
+    return {
+      id: u.id,
+      email: u.email,
+      name: u.name || null,
+      role: u.role,
+      createdAt: u.createdAt,
+    };
+  },
+};
