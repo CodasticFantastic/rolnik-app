@@ -2,7 +2,7 @@ import { CreateUserInput, SanitizedUser } from "./user.types";
 import { prisma } from "@/backend/lib/prisma/prisma.client";
 import { AppError } from "@/backend/lib/errors/app.error";
 import { userError } from "./user.error.codes";
-import { hashPassword } from "@/backend/lib/auth/auth.helpers";
+import { hashPassword } from "@/backend/auth/auth.helpers";
 import { userMapper } from "./user.mapper";
 import { UserRole } from "@prisma/client";
 

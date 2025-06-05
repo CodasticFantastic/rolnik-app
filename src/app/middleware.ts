@@ -1,4 +1,4 @@
-import { auth } from "@/backend/lib/auth/auth";
+import { auth } from "@/backend/auth/auth";
 import { NextResponse } from "next/server";
 
 export default auth((req) => {

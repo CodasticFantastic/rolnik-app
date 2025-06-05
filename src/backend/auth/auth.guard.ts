@@ -1,7 +1,7 @@
 import { AuthSessionUser } from "./auth.types";
-import { globalError } from "../errors/global.error.codes";
 import { auth } from "./auth";
-import { AppError } from "../errors/app.error";
+import { AppError } from "@/backend/lib/errors/app.error";
+import { globalError } from "@/backend/lib/errors/global.error.codes";
 
 export async function requireAuth(): Promise<AuthSessionUser> {
   const session = await auth();

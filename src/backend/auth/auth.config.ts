@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthConfig } from "next-auth";
 import { prisma } from "@/backend/lib/prisma/prisma.client";
-import { verifyPassword } from "@/backend/lib/auth/auth.helpers";
+import { verifyPassword } from "@/backend/auth/auth.helpers";
 import {
   SanitizedUser,
   SignInUserInput,
