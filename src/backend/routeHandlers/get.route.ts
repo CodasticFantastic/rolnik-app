@@ -1,7 +1,14 @@
 import { ZodTypeAny, z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { AppError } from "../errors/app.error";
-import { globalError, GlobalErrorCode } from "../errors/global.error.codes";
+import {
+  AppError,
+  AppErrorHttpResponseObject,
+  DevelopmentAppErrorHttpResponseObject,
+} from "@/backend/lib/errors/app.error";
+import {
+  globalError,
+  GlobalErrorCode,
+} from "@/backend/lib/errors/global.error.codes";
 
 type GetHandlerNoValidation = (req: NextRequest) => Promise<Response>;
 
@@ -55,8 +62,15 @@ export function handleGetRoute<T extends ZodTypeAny>(
       if (error instanceof AppError) {
         return NextResponse.json(
           process.env.NODE_ENV === "production"
-            ? { error: error.errorCode }
-            : { error: error.errorCode, details: error.details },
+            ? ({
+                error: error.errorCode,
+                status: error.status,
+              } satisfies AppErrorHttpResponseObject)
+            : ({
+                error: error.errorCode,
+                status: error.status,
+                details: error.details,
+              } satisfies DevelopmentAppErrorHttpResponseObject),
           { status: error.status }
         );
       }

@@ -25,11 +25,14 @@ export const HeaderWebsite = () => {
           Internetowe Centrum Rolnicze
         </p>
       </div>
-      <div>
-        <Link href="/auth/sign-in">
+      <div className="flex gap-x-2">
+        <Link href="/auth/sign-up">
           <Button variant="outlinePrimary" className="cursor-pointer">
-            Zaloguj się
+            Zarejestruj się
           </Button>
+        </Link>
+        <Link href="/auth/sign-in">
+          <Button className="cursor-pointer">Zaloguj się</Button>
         </Link>
       </div>
     </header>

@@ -29,6 +29,7 @@ export const userService = {
         email: data.email,
         password: hashedPassword,
         name: data.name,
+        phoneNumber: data.phoneNumber,
         role: UserRole.LOW_PRIVILEGED_USER,
       },
     });

@@ -10,3 +10,8 @@ export const userError: Record<UserErrorCode, AppErrorShape<UserErrorCode>> = {
     status: 409,
   },
 };
+
+export const userErrorMessage: Record<UserErrorCode, string> = {
+  [UserErrorCode.USER_ALREADY_EXISTS]:
+    "Użytkownik o podanym adresie email już istnieje",
+};

@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/frontend/components/shadcn/button";
 import {
   Form,
@@ -10,19 +9,24 @@ import {
   FormMessage,
 } from "@/frontend/components/shadcn/form";
 import { Input } from "@/frontend/components/shadcn/input";
-import { globalZodValidators } from "@/frontend/lib/validators/globalZodValidators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const signInFormSchema = z.object({
-  email: globalZodValidators.email,
-  password: globalZodValidators.password,
-});
+import { signIn } from "next-auth/react";
+import { signInUserValidator } from "@/backend/modules/user/user.validator";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/frontend/components/shadcn/alert";
+import { AlertCircleIcon } from "lucide-react";
+import { useState } from "react";
 
 export const SignInForm = () => {
-  const form = useForm<z.infer<typeof signInFormSchema>>({
-    resolver: zodResolver(signInFormSchema),
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseFormError, setResponseFormError] = useState(false);
+  const form = useForm<z.infer<typeof signInUserValidator>>({
+    resolver: zodResolver(signInUserValidator),
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -30,8 +34,18 @@ export const SignInForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof signInUserValidator>) {
+    setIsLoading(true);
+    const response = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (response.error) {
+      setResponseFormError(true);
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -65,8 +79,18 @@ export const SignInForm = () => {
             </FormItem>
           )}
         />
+        {/* Alert */}
+        {responseFormError && (
+          <Alert variant="error">
+            <AlertCircleIcon />
+            <AlertTitle>Niepoprawne dane logowania</AlertTitle>
+            <AlertDescription>
+              <p>Twój email lub hasło są niepoprawne.</p>
+            </AlertDescription>
+          </Alert>
+        )}
         {/* Submit */}
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" isLoading={isLoading}>
           Zaloguj
         </Button>
       </form>

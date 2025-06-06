@@ -8,6 +8,14 @@ export type AppErrorShape<T = AppErrorCodes> = {
   status: number;
 };
 
+export type AppErrorHttpResponseObject = {
+  error: AppErrorCodes;
+  status: number;
+};
+
+export type DevelopmentAppErrorHttpResponseObject =
+  AppErrorHttpResponseObject & { details?: unknown };
+
 export class AppError extends Error {
   public readonly errorCode: AppErrorCodes;
   public readonly status: number;

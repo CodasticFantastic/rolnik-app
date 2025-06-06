@@ -6,7 +6,8 @@ export const userMapper = {
     return {
       id: u.id,
       email: u.email,
-      name: u.name || null,
+      name: u.name,
+      phoneNumber: u.phoneNumber,
       role: u.role,
     } satisfies SanitizedUser;
   },

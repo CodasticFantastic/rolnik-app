@@ -19,10 +19,22 @@ enum UserRole {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  role      UserRole @default(LOW_PRIVILEGED_USER)
-  email     String   @unique
-  password  String
-  name      String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  role        UserRole @default(LOW_PRIVILEGED_USER)
+  email       String   @unique
+  password    String
+  name        String
+  phoneNumber String
+  createdAt   DateTime @default(now())
+
+  LowPrivilegedUserProfile LowPrivilegedUserProfile?
+}
+
+model LowPrivilegedUserProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  acceptedTermsOfService   Boolean
+  acceptedTermsOfServiceAt DateTime
 }
