@@ -12,7 +12,7 @@ import { Input } from "@/frontend/components/shadcn/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { signInUserValidator } from "@/backend/modules/user/user.validator";
 import {
   Alert,
@@ -21,6 +21,7 @@ import {
 } from "@/frontend/components/shadcn/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { useState } from "react";
+import { UserRole } from "@prisma/client";
 
 export const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +36,7 @@ export const SignInForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof signInUserValidator>) {
+    setResponseFormError(false);
     setIsLoading(true);
     const response = await signIn("credentials", {
       email: values.email,
@@ -42,9 +44,23 @@ export const SignInForm = () => {
       redirect: false,
     });
 
-    if (response.error) {
+    if (response?.error) {
       setResponseFormError(true);
       setIsLoading(false);
+    }
+
+    const session = await getSession();
+
+    if (!session) {
+      return;
+    }
+
+    const userRole = session.user?.role;
+
+    if (userRole === UserRole.ADMIN) {
+      window.location.href = "/admin-panel";
+    } else if (userRole === UserRole.LOW_PRIVILEGED_USER) {
+      window.location.href = "/client-panel";
     }
   }
 

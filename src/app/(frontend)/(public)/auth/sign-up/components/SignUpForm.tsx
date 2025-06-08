@@ -1,4 +1,9 @@
 "use client";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircleIcon } from "lucide-react";
 import { Button } from "@/frontend/components/shadcn/button";
 import {
   Form,
@@ -9,22 +14,21 @@ import {
   FormMessage,
 } from "@/frontend/components/shadcn/form";
 import { Input } from "@/frontend/components/shadcn/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { createUserValidator } from "@/backend/modules/user/user.validator";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from "@/frontend/components/shadcn/alert";
-import { AlertCircleIcon } from "lucide-react";
-import { useState } from "react";
 import { Checkbox } from "@/frontend/components/shadcn/checkbox";
-import { createUser } from "@/frontend/api/public/user/createUser";
-import { userErrorMessage } from "@/backend/modules/user/user.error.codes";
+import {
+  UserErrorCode,
+  userErrorMessage,
+} from "@/backend/modules/user/user.error.codes";
+import { createUserValidator } from "@/backend/modules/user/user.validator";
+import { useRouter } from "next/navigation";
 
 export const SignUpForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [responseFormError, setResponseFormError] = useState<false | string>(
     false
@@ -55,9 +59,11 @@ export const SignUpForm = () => {
       if (!response.ok) {
         const error = await response.json();
 
-        console.log(error);
-
-        setResponseFormError(userErrorMessage[error.error]);
+        // TODO: Refactor this code
+        setResponseFormError(userErrorMessage[error.error as UserErrorCode]);
+      } else {
+        router.push("/auth/sign-in");
+        setResponseFormError(false);
       }
     } catch {
       setIsLoading(false);
