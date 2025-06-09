@@ -1,4 +1,5 @@
 import { AdminSideBar } from "@/frontend/components/layout/sidebar/AdminSideBar";
+import ReactQueryProvider from "@/frontend/components/providers/ReactQueryProvider";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -35,13 +36,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <AdminSideBar />
-          <main className="p-2">
-            <SidebarTrigger className="cursor-pointer" />
-            {children}
-          </main>
-        </SidebarProvider>
+        <ReactQueryProvider>
+          <SidebarProvider>
+            <AdminSideBar />
+            <main className="p-2 w-full">
+              <SidebarTrigger className="cursor-pointer" />
+              {children}
+            </main>
+          </SidebarProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

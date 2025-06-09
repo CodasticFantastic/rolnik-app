@@ -1,4 +1,4 @@
-import { LayoutDashboard, User } from "lucide-react";
+import { LayoutDashboard, ListChecks, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +24,11 @@ const AdminMenu = [
     title: "Użytkownicy",
     icon: User,
     url: "/admin-panel/users",
+  },
+  {
+    title: "Ogłoszenia rynkowe",
+    icon: ListChecks,
+    url: "/admin-panel/announcements",
   },
 ];
 

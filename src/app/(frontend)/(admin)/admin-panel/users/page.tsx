@@ -1,22 +1,20 @@
 "use client";
-import { useEffect } from "react";
+
+import { useAdminUsers } from "@/frontend/api/private/users/user.query";
+import { Skeleton } from "@/frontend/components/shadcn/skeleton";
+
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
 
 export default function UsersPage() {
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch("/api/private/users");
-      const json = await res.json();
+  const { data, isPending, error } = useAdminUsers();
 
-      console.log(res);
-      console.log(json);
-    } catch {
-      console.log("error");
-    }
-  };
+  if (isPending) return <Skeleton className="h-100 w-full" />;
+  if (error) return <div>Wystąpił błąd: {error.message}</div>;
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  return <h1>Użytkownicy</h1>;
+  return (
+    <div className="container mx-auto my-2">
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
 }
