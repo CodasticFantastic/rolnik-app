@@ -1,14 +1,6 @@
 import { UserRole } from "@prisma/client";
 
-export interface User {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  role: UserRole;
-  createdAt: Date;
-}
-
+// Prisma User object but without password
 export interface SanitizedUser {
   id: string;
   email: string;
