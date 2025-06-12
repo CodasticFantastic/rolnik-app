@@ -1,6 +1,7 @@
 "use client";
 
 import { SanitizedUser } from "@/backend/modules/user/user.types";
+import { DataTableColumnHeader } from "@/frontend/components/customs/data-table/data-table-column-header";
 import { Button } from "@/frontend/components/shadcn/button";
 import { Checkbox } from "@/frontend/components/shadcn/checkbox";
 import {
@@ -47,25 +48,21 @@ export const columns: ColumnDef<SanitizedUser>[] = [
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Imię" />
+    ),
   },
   {
     accessorKey: "phoneNumber",
-    header: "Numer Telefonu",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Numer telefonu" />
+    ),
   },
   {
     accessorKey: "role",

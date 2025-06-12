@@ -18,6 +18,7 @@ enum UserRole {
   LOW_PRIVILEGED_USER
 }
 
+// Users
 model User {
   id          String   @id @default(uuid())
   role        UserRole @default(LOW_PRIVILEGED_USER)
@@ -28,6 +29,7 @@ model User {
   createdAt   DateTime @default(now())
 
   LowPrivilegedUserProfile LowPrivilegedUserProfile?
+  MarketAnnouncements      MarketAnnouncement[]
 }
 
 model LowPrivilegedUserProfile {
@@ -37,4 +39,44 @@ model LowPrivilegedUserProfile {
 
   acceptedTermsOfService   Boolean
   acceptedTermsOfServiceAt DateTime
+}
+
+// Announcements
+enum MarketAnnouncementType {
+  BUY
+  SELL
+}
+
+enum ProductCategory {
+  GRAIN
+  VEGETABLES
+  FRUITS
+  LIVESTOCK
+  MACHINERY
+  SERVICES
+  OTHER
+}
+
+enum Units {
+  LITER
+  GRAM
+  KILOGRAM
+  TON
+  PIECE
+}
+
+model MarketAnnouncement {
+  id          String                 @id @default(uuid())
+  title       String
+  description String
+  type        MarketAnnouncementType
+  category    ProductCategory
+  price       Decimal
+  unit        Units
+  location    String // lub osobny model geograficzny
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  userId      String
+  user        User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isActive    Boolean                @default(false)
 }

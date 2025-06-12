@@ -4,7 +4,7 @@ import { useAdminUsers } from "@/frontend/api/private/users/user.query";
 import { Skeleton } from "@/frontend/components/shadcn/skeleton";
 
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../../../../frontend/components/customs/data-table/data-table";
 
 export default function UsersPage() {
   const { data, isPending, error } = useAdminUsers();

@@ -1,7 +1,11 @@
 import { UserErrorCode } from "@/backend/modules/user/user.error.codes";
 import { GlobalErrorCode } from "./global.error.codes";
+import { MarketAnnouncementErrorCode } from "@/backend/modules/market-announcement/market-announcement.error.codes";
 
-type AppErrorCodes = GlobalErrorCode | UserErrorCode;
+type AppErrorCodes =
+  | GlobalErrorCode
+  | UserErrorCode
+  | MarketAnnouncementErrorCode;
 
 export type AppErrorShape<T = AppErrorCodes> = {
   errorCode: T;
