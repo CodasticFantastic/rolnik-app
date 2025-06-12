@@ -1,14 +1,8 @@
 import { ZodTypeAny, z } from "zod";
-import { NextRequest, NextResponse } from "next/server";
-import {
-  AppError,
-  AppErrorHttpResponseObject,
-  DevelopmentAppErrorHttpResponseObject,
-} from "@/backend/lib/errors/app.error";
-import {
-  globalError,
-  GlobalErrorCode,
-} from "@/backend/lib/errors/global.error.codes";
+import { NextRequest } from "next/server";
+import { AppError } from "@/backend/lib/errors/app.error";
+import { globalError } from "@/backend/lib/errors/global.error.codes";
+import { handleRouteError } from "./error.route";
 
 type GetHandlerNoValidation = (req: NextRequest) => Promise<Response>;
 
@@ -59,27 +53,7 @@ export function handleGetRoute<T extends ZodTypeAny>(
 
       return await handler(parsed.data, req);
     } catch (error) {
-      if (error instanceof AppError) {
-        return NextResponse.json(
-          process.env.NODE_ENV === "production"
-            ? ({
-                error: error.errorCode,
-                status: error.status,
-              } satisfies AppErrorHttpResponseObject)
-            : ({
-                error: error.errorCode,
-                status: error.status,
-                details: error.details,
-              } satisfies DevelopmentAppErrorHttpResponseObject),
-          { status: error.status }
-        );
-      }
-
-      console.error("Unexpected error:", error);
-      return NextResponse.json(
-        { error: GlobalErrorCode.UNKNOWN_ERROR },
-        { status: 500 }
-      );
+      return handleRouteError(error);
     }
   };
 }

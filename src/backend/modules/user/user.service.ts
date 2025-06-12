@@ -13,7 +13,10 @@ export const userService = {
     return users.map(userMapper.sanitizedUserResponse);
   },
 
-  async createLowPrivilegedUser(data: CreateUserInput): Promise<SanitizedUser> {
+  async register(
+    data: CreateUserInput,
+    role: UserRole = UserRole.LOW_PRIVILEGED_USER
+  ): Promise<SanitizedUser> {
     const existing = await prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -30,7 +33,7 @@ export const userService = {
         password: hashedPassword,
         name: data.name,
         phoneNumber: data.phoneNumber,
-        role: UserRole.LOW_PRIVILEGED_USER,
+        role: role,
       },
     });
 

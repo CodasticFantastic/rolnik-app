@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { CreateUserInput, SignInUserInput } from "./user.types";
 
+// Validator Config
 const userValidatorConfig = {
   email: z.string().nonempty("Email jest wymagany").email("Niepoprawny email"),
   password: z
@@ -21,28 +22,25 @@ const userValidatorConfig = {
   }),
 };
 
-// Create user validator
-const createUserValidatorShape = {
-  email: userValidatorConfig.email,
-  password: userValidatorConfig.password,
-  repeatPassword: userValidatorConfig.repeatPassword,
-  name: userValidatorConfig.name,
-  phoneNumber: userValidatorConfig.phoneNumber,
-  acceptedTermsOfService: userValidatorConfig.acceptedTermsOfService,
-} satisfies Record<keyof CreateUserInput, z.ZodTypeAny>;
-
+// Validators
 export const createUserValidator = z
-  .object(createUserValidatorShape)
+  .object({
+    email: userValidatorConfig.email,
+    password: userValidatorConfig.password,
+    repeatPassword: userValidatorConfig.repeatPassword,
+    name: userValidatorConfig.name,
+    phoneNumber: userValidatorConfig.phoneNumber,
+    acceptedTermsOfService: userValidatorConfig.acceptedTermsOfService,
+  } satisfies Record<keyof CreateUserInput, z.ZodTypeAny>)
   .strict()
   .refine((data) => data.password === data.repeatPassword, {
     path: ["repeatPassword"],
     message: "Hasła nie pasują do siebie",
   });
 
-// Sign in user validator
-const signInUserValidatorShape = {
-  email: userValidatorConfig.email,
-  password: userValidatorConfig.password,
-} satisfies Record<keyof SignInUserInput, z.ZodTypeAny>;
-
-export const signInUserValidator = z.object(signInUserValidatorShape).strict();
+export const signInUserValidator = z
+  .object({
+    email: userValidatorConfig.email,
+    password: userValidatorConfig.password,
+  } satisfies Record<keyof SignInUserInput, z.ZodTypeAny>)
+  .strict();

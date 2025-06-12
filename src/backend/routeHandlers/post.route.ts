@@ -1,14 +1,8 @@
 import { ZodTypeAny, z } from "zod";
-import { NextRequest, NextResponse } from "next/server";
-import {
-  AppError,
-  AppErrorHttpResponseObject,
-  DevelopmentAppErrorHttpResponseObject,
-} from "@/backend/lib/errors/app.error";
-import {
-  GlobalErrorCode,
-  globalError,
-} from "@/backend/lib/errors/global.error.codes";
+import { NextRequest } from "next/server";
+import { AppError } from "@/backend/lib/errors/app.error";
+import { globalError } from "@/backend/lib/errors/global.error.codes";
+import { handleRouteError } from "./error.route";
 
 type PostRouteHandler<T extends ZodTypeAny> = (
   data: z.infer<T>,
@@ -23,14 +17,15 @@ export function handlePostRoute<T extends ZodTypeAny>(
     try {
       let body: unknown;
 
+      // Check if the request body is JSON
       try {
         body = await req.json();
       } catch {
         throw new AppError({ ...globalError.INVALID_JSON });
       }
 
+      // Validate JSON body against ZOD schema
       const parsed = schemaToValidate.safeParse(body);
-
       if (!parsed.success) {
         throw new AppError({
           ...globalError.INVALID_INPUT,
@@ -38,29 +33,10 @@ export function handlePostRoute<T extends ZodTypeAny>(
         });
       }
 
+      // Run handler
       return await handler(parsed.data, req);
     } catch (error) {
-      if (error instanceof AppError) {
-        return NextResponse.json(
-          process.env.NODE_ENV === "production"
-            ? ({
-                error: error.errorCode,
-                status: error.status,
-              } satisfies AppErrorHttpResponseObject)
-            : ({
-                error: error.errorCode,
-                status: error.status,
-                details: error.details,
-              } satisfies DevelopmentAppErrorHttpResponseObject),
-          { status: error.status }
-        );
-      }
-
-      console.error("Unexpected error:", error);
-      return NextResponse.json(
-        { error: GlobalErrorCode.UNKNOWN_ERROR },
-        { status: 500 }
-      );
+      return handleRouteError(error);
     }
   };
 }
